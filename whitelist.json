@@ -1,5 +1,5 @@
 {
-    "publicAccess": false,
+    "publicAccess": true,
     "whitelist": [
         123456789,
         987654321
