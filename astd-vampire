@@ -13,11 +13,11 @@ local server = remotes:WaitForChild("Server")
 -- QueueOnTeleport (persists on rejoin)
 if syn and syn.queue_on_teleport then
     syn.queue_on_teleport([[
-        loadstring(game:HttpGet("PUT_YOUR_RAW_SCRIPT_URL_HERE"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/RadiantSkullz/test/refs/heads/main/astd-vampire))()
     ]])
 elseif getgenv and getgenv().queue_on_teleport then
     getgenv().queue_on_teleport([[
-        loadstring(game:HttpGet("PUT_YOUR_RAW_SCRIPT_URL_HERE"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/RadiantSkullz/test/refs/heads/main/astd-vampire"))()
     ]])
 end
 
