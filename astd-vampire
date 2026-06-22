@@ -1,0 +1,89 @@
+-- Auto Farm Script (QueueOnTeleport + Auto Summon + Upgrades + Speed)
+-- Paste into your executor
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+
+local player = Players.LocalPlayer
+local remotes = ReplicatedStorage:WaitForChild("Remotes")
+local input = remotes:WaitForChild("Input")
+local server = remotes:WaitForChild("Server")
+
+-- QueueOnTeleport (persists on rejoin)
+if syn and syn.queue_on_teleport then
+    syn.queue_on_teleport([[
+        loadstring(game:HttpGet("PUT_YOUR_RAW_SCRIPT_URL_HERE"))()
+    ]])
+elseif getgenv and getgenv().queue_on_teleport then
+    getgenv().queue_on_teleport([[
+        loadstring(game:HttpGet("PUT_YOUR_RAW_SCRIPT_URL_HERE"))()
+    ]])
+end
+
+-- Wait for game fully loaded
+repeat task.wait() until game:IsLoaded() and player:FindFirstChild("Money")
+task.wait(2)
+
+print("=== Auto Farm Started ===")
+
+-- Vote Extreme Mode
+input:FireServer("VoteGameMode", "Extreme")
+task.wait(1.5)
+
+-- Summon Daydayfarm
+input:FireServer("Summon", {
+    Rotation = 1.5707963267948966,
+    cframe = CFrame.new(-633.3836669921875, 558.4353637695312, 508.102294921875, -4.371138828673793e-08, 0, 1, 0, 1, 0, -1, 0, -4.371138828673793e-08),
+    Unit = "Daydayfarm"
+})
+task.wait(0.8)
+
+-- Summon Homura7 if enough money
+local money = player.Money
+if money.Value > 325 then
+    input:FireServer("Summon", {
+        Rotation = 1.5707963267948966,
+        cframe = CFrame.new(-637.2546997070312, 558.4353637695312, 525.9309692382812, -4.371138828673793e-08, 0, 1, 0, 1, 0, -1, 0, -4.371138828673793e-08),
+        Unit = "Homura7"
+    })
+end
+
+task.wait(2.5)
+
+-- Upgrade function
+local function Upgrade(unitName)
+    local unitFolder = Workspace:FindFirstChild("Unit")
+    if unitFolder then
+        local unit = unitFolder:FindFirstChild(unitName)
+        if unit then
+            server:InvokeServer("Upgrade", unit)
+            print("Upgraded:", unitName)
+        end
+    end
+end
+
+-- Upgrade the units
+Upgrade("Homura7")
+Upgrade("Daydayfarm")
+Upgrade("Leafa6")
+
+task.wait(1)
+
+-- Summon Leafa6 if enough money
+if money.Value > 450 then
+    input:FireServer("Summon", {
+        Rotation = 1.5707963267948966,
+        cframe = CFrame.new(-638.0983276367188, 558.5253295898438, 531.0305786132812, -4.371138828673793e-08, 0, 1, 0, 1, 0, -1, 0, -4.371138828673793e-08),
+        Unit = "Leafa6"
+    })
+end
+
+-- Force SpeedUP to 3
+local speedUp = ReplicatedStorage:WaitForChild("SpeedUP")
+while speedUp.Value ~= 3 do
+    input:FireServer("SpeedChange", true)
+    task.wait(0.4)
+end
+
+print("=== All actions completed - SpeedUP is 3 ===")
